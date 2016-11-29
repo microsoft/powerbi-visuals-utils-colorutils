@@ -26,7 +26,7 @@
     "lint": "tslint \"+(src|test)/**/*.ts\""
   },
   "devDependencies": {
-    "powerbi-visuals-utils-testutils": "git+https://github.com/ignatvilesov/powerbi-visuals-utils-testutils.git",
+    "powerbi-visuals-utils-testutils": "0.1.0",
     "@types/jasmine": "2.5.37",
     "jasmine": "2.5.2",
     "karma": "1.3.0",
@@ -38,7 +38,7 @@
     "typescript": "1.8.10"
   },
   "dependencies": {
-    "powerbi-visuals-utils-dataviewutils": "git+https://github.com/Microsoft/powerbi-visuals-utils-dataviewutils.git",
-    "powerbi-visuals-utils-typeutils": "git+https://github.com/ignatvilesov/powerbi-visuals-utils-typeutils.git"
+    "powerbi-visuals-utils-dataviewutils": "0.1.0",
+    "powerbi-visuals-utils-typeutils": "0.1.0"
   }
 }
