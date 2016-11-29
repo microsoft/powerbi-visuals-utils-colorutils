@@ -1,0 +1,44 @@
+{
+  "name": "powerbi-visuals-utils-colorutils",
+  "version": "0.1.0",
+  "description": "ColorUtils",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Microsoft/powerbi-visuals-utils-colorutils.git"
+  },
+  "keywords": [
+    "powerbi-visuals-utils"
+  ],
+  "author": "Microsoft",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Microsoft/powerbi-visuals-utils-colorutils/issues"
+  },
+  "homepage": "https://github.com/Microsoft/powerbi-visuals-utils-colorutils#readme",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "karma start",
+    "pretest": "npm run build",
+    "lint": "tslint \"+(src|test)/**/*.ts\""
+  },
+  "devDependencies": {
+    "powerbi-visuals-utils-testutils": "git+https://github.com/ignatvilesov/powerbi-visuals-utils-testutils.git",
+    "@types/jasmine": "2.5.37",
+    "jasmine": "2.5.2",
+    "karma": "1.3.0",
+    "karma-chrome-launcher": "2.0.0",
+    "karma-jasmine": "1.0.2",
+    "karma-typescript-preprocessor": "0.3.0",
+    "powerbi-visuals-tools": "1.2.0",
+    "tslint": "3.15.1",
+    "typescript": "1.8.10"
+  },
+  "dependencies": {
+    "powerbi-visuals-utils-dataviewutils": "git+https://github.com/Microsoft/powerbi-visuals-utils-dataviewutils.git",
+    "powerbi-visuals-utils-typeutils": "git+https://github.com/ignatvilesov/powerbi-visuals-utils-typeutils.git"
+  }
+}
