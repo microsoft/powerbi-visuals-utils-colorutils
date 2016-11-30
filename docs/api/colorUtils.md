@@ -25,8 +25,8 @@ function hexToRGBString(hex: string, transparency?: number): string
 #### example
 ```typescript
 import ColorUtility = powerbi.extensibility.utils.color;
-let color2 = ColorUtility.hexToRGBString('#112233');
-expect(color2).toBe("rgb(17,34,51)");
+colorUtility.hexToRGBString('#112233');
+// returns "rgb(17,34,51)"
 ```
 
 ## rotate
@@ -45,17 +45,11 @@ function parseColorString(color: string): RgbColor
 #### example
 ```typescript
 import ColorUtility = powerbi.extensibility.utils.color;
-expect(ColorUtility.parseColorString('#09f')).toEqual({
-                    R: 0,
-                    G: parseInt('99', 16),
-                    B: parseInt('ff', 16),
-                });
-expect(ColorUtility.parseColorString('rgba(1, 2, 3, 1.0)')).toEqual({
-                    R: 1,
-                    G: 2,
-                    B: 3,
-                    A: 1.0,
-                });
+ColorUtility.parseColorString('#09f')
+// returns {R: 0, G: 153, B: 255 }
+
+ColorUtility.parseColorString('rgba(1, 2, 3, 1.0)')
+// returns {R: 1, G: 2, B: 3, A: 1.0 }
 ```
 
 ## rgbToHsv
@@ -90,7 +84,8 @@ function calculateHighlightColor(rgbColor: RgbColor, lumianceThreshold: number, 
 import ColorUtility = powerbi.extensibility.utils.color;
 let yellow = "#FFFF00";
 let yellowRGB = ColorUtility.parseColorString(yellow);
-expect(ColorUtility.calculateHighlightColor(yellowRGB, 0.8, 0.2)).toEqual('#CCCC00');
+ColorUtility.calculateHighlightColor(yellowRGB, 0.8, 0.2);
+// returns '#CCCC00'
 ```
 
 ## createLinearColorScale
@@ -110,10 +105,10 @@ function shadeColor(color: string, percent: number): string
 #### example
 ```typescript
 import ColorUtility = powerbi.extensibility.utils.color;
-expect(ColorUtility.shadeColor('#000000', 0.1)).toBe('#1a1a1a');
-expect(ColorUtility.shadeColor('#FFFFFF', -0.5)).toBe('#808080');
-expect(ColorUtility.shadeColor('#00B8AA', -0.25)).toBe('#008a80');
-expect(ColorUtility.shadeColor('#00B8AA', 0)).toBe('#00b8aa');
+ColorUtility.shadeColor('#000000', 0.1); // returns '#1a1a1a'
+ColorUtility.shadeColor('#FFFFFF', -0.5); // returns '#808080'
+ColorUtility.shadeColor('#00B8AA', -0.25); // returns '#008a80'
+ColorUtility.shadeColor('#00B8AA', 0); // returns '#00b8aa'
 ```
 
 ## rgbBlend
@@ -132,10 +127,10 @@ function channelBlend(foreChannel: number, opacity: number, backChannel: number)
 #### example
 ```typescript
 import ColorUtility = powerbi.extensibility.utils.color;
-expect(ColorUtility.channelBlend(0, 1, 255)).toBe(0);
-expect(ColorUtility.channelBlend(128, 1, 255)).toBe(128);
-expect(ColorUtility.channelBlend(255, 0, 0)).toBe(0);
-expect(ColorUtility.channelBlend(88, 0, 88)).toBe(88);
+ColorUtility.channelBlend(0, 1, 255); // returns 0
+ColorUtility.channelBlend(128, 1, 255); // returns 128
+ColorUtility.channelBlend(255, 0, 0); // returns 0
+ColorUtility.channelBlend(88, 0, 88); // returns 88
 ```
 
 ## hexBlend
@@ -150,9 +145,9 @@ import ColorUtility = powerbi.extensibility.utils.color;
 let yellow = "#FFFF00";
 let black = "#000000";
 let white = "#FFFFFF";
-expect(ColorUtility.hexBlend(yellow, 0.5, white)).toEqual("#FFFF80");
-expect(ColorUtility.hexBlend(white, 0.5, yellow)).toEqual("#FFFF80");
+ColorUtility.hexBlend(yellow, 0.5, white); // returns "#FFFF80"
+ColorUtility.hexBlend(white, 0.5, yellow); // returns "#FFFF80"
 
-expect(ColorUtility.hexBlend(yellow, 0.5, black)).toEqual("#808000");
-expect(ColorUtility.hexBlend(black, 0.5, yellow)).toEqual("#808000");
+ColorUtility.hexBlend(yellow, 0.5, black); // returns "#808000"
+ColorUtility.hexBlend(black, 0.5, yellow); // returns "#808000"
 ```
