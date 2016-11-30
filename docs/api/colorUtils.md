@@ -25,7 +25,7 @@ function hexToRGBString(hex: string, transparency?: number): string
 #### example
 ```typescript
 import ColorUtility = powerbi.extensibility.utils.color;
-colorUtility.hexToRGBString('#112233');
+ColorUtility.hexToRGBString('#112233');
 // returns "rgb(17,34,51)"
 ```
 
