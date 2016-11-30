@@ -1,6 +1,6 @@
 {
   "name": "powerbi-visuals-utils-colorutils",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "ColorUtils",
   "main": "lib/index.js",
   "repository": {
@@ -26,7 +26,7 @@
     "lint": "tslint \"+(src|test)/**/*.ts\""
   },
   "devDependencies": {
-    "powerbi-visuals-utils-testutils": "0.1.0",
+    "powerbi-visuals-utils-testutils": "^0.2.0",
     "@types/jasmine": "2.5.37",
     "jasmine": "2.5.2",
     "karma": "1.3.0",
@@ -38,7 +38,7 @@
     "typescript": "1.8.10"
   },
   "dependencies": {
-    "powerbi-visuals-utils-dataviewutils": "0.1.0",
-    "powerbi-visuals-utils-typeutils": "0.1.0"
+    "powerbi-visuals-utils-dataviewutils": "^0.3.0",
+    "powerbi-visuals-utils-typeutils": "^0.2.0"
   }
 }
