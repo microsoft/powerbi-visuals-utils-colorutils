@@ -3,8 +3,8 @@
 
 The ```powerbi.extensibility.utils.color``` module provides the following functions and interfaces:
 
-* [getColorForSeriesValue](#getColorForSeriesValue)
-* [getColorForMeasure](#getColorForMeasure)
+* [getColorForSeriesValue](#getcolorforseriesvalue)
+* [getColorForMeasure](#getcolorformeasure)
 
 ## getColorForSeriesValue
 Gets the color for the given series value.

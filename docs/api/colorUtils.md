@@ -3,18 +3,18 @@
 
 The ```powerbi.extensibility.utils.color``` module provides the following functions and interfaces:
 
-* [hexToRGBString](#hexToRGBString)
+* [hexToRGBString](#hextorgbstring)
 * [rotate](#rotate)
-* [parseColorString](#parseColorString)
-* [rgbToHsv](#rgbToHsv)
-* [hsvToRgb](#hsvToRgb)
-* [rotateHsv](#rotateHsv)
-* [calculateHighlightColor](#calculateHighlightColor)
-* [createLinearColorScale](#createLinearColorScale)
-* [shadeColor](#shadeColor)
-* [rgbBlend](#rgbBlend)
-* [channelBlend](#channelBlend)
-* [hexBlend](#hexBlend)
+* [parseColorString](#parsecolorstring)
+* [rgbToHsv](#rgbtohsv)
+* [hsvToRgb](#hsvtorgb)
+* [rotateHsv](#rotatehsv)
+* [calculateHighlightColor](#calculatehighlightcolor)
+* [createLinearColorScale](#createlinearcolorscale)
+* [shadeColor](#shadecolor)
+* [rgbBlend](#rgbblend)
+* [channelBlend](#channelblend)
+* [hexBlend](#hexblend)
 
 ## hexToRGBString
 Converts hex color to RGB string
