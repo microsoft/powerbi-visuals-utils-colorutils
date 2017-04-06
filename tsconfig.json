@@ -4,8 +4,7 @@
         "experimentalDecorators": true,
         "target": "ES5",
         "declaration": true,
-        "outFile": "./lib/index.js",
-        "sourceMap": true
+        "outFile": "./lib/index.js"
     },
     "files": [
         "node_modules/powerbi-visuals-tools/templates/visuals/.api/v1.2.0/PowerBI-visuals.d.ts",
