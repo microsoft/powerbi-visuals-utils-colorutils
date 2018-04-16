@@ -2,7 +2,8 @@
   "name": "powerbi-visuals-utils-colorutils",
   "version": "1.0.0",
   "description": "ColorUtils",
-  "main": "lib/index.js",
+  "main": "lib/index",
+  "types": "lib/index",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Microsoft/powerbi-visuals-utils-colorutils.git"
