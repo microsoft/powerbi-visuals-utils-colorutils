@@ -24,9 +24,7 @@
 *  THE SOFTWARE.
 */
 
-import { double } from "powerbi-visuals-utils-typeutils";
-
-import Double = double.Double;
+import { double as Double } from "powerbi-visuals-utils-typeutils";
 
 export function hexToRGBString(hex: string, transparency?: number): string {
 
