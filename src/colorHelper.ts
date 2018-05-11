@@ -24,60 +24,61 @@
  *  THE SOFTWARE.
  */
 
-module powerbi.extensibility.utils.color {
-    // powerbi
-    import DataViewObjectPropertyIdentifier = powerbi.DataViewObjectPropertyIdentifier;
-    import IDataViewObjects = powerbi.DataViewObjects;
-    import PrimitiveValue = powerbi.PrimitiveValue;
+import { dataViewObjects } from "powerbi-visuals-utils-dataviewutils";
 
-    // powerbi.data
-    import Selector = powerbi.data.Selector;
+// powerbi
+import powerbi from "powerbi-visuals-tools";
+import DataViewObjectPropertyIdentifier = powerbi.DataViewObjectPropertyIdentifier;
+import IDataViewObjects = powerbi.DataViewObjects;
+import PrimitiveValue = powerbi.PrimitiveValue;
 
-    // powerbi.extensibility
-    import IColorPalette = powerbi.extensibility.IColorPalette;
+// powerbi.data
+import Selector = powerbi.data.Selector;
 
-    import DataViewObjects = powerbi.extensibility.utils.dataview.DataViewObjects;
+// powerbi.extensibility
+import IColorPalette = powerbi.extensibility.IColorPalette;
 
-    export class ColorHelper {
-        private fillProp: DataViewObjectPropertyIdentifier;
-        private defaultDataPointColor: string;
-        private colors: IColorPalette;
+import DataViewObjects = dataViewObjects.DataViewObjects;
 
-        constructor(colors: IColorPalette, fillProp?: DataViewObjectPropertyIdentifier, defaultDataPointColor?: string) {
-            this.colors = colors;
-            this.fillProp = fillProp;
-            this.defaultDataPointColor = defaultDataPointColor;
-        }
+export class ColorHelper {
+    private fillProp: DataViewObjectPropertyIdentifier;
+    private defaultDataPointColor: string;
+    private colors: IColorPalette;
 
-        /**
-         * Gets the color for the given series value.
-         * If no explicit color or default color has been set then the color is
-         * allocated from the color scale for this series.
-         */
-        public getColorForSeriesValue(objects: IDataViewObjects, value: PrimitiveValue): string {
-            return (this.fillProp && DataViewObjects.getFillColor(objects, this.fillProp))
-                || this.defaultDataPointColor
-                || this.colors.getColor(String(value)).value;
-        }
+    constructor(colors: IColorPalette, fillProp?: DataViewObjectPropertyIdentifier, defaultDataPointColor?: string) {
+        this.colors = colors;
+        this.fillProp = fillProp;
+        this.defaultDataPointColor = defaultDataPointColor;
+    }
 
-        /**
-         * Gets the color for the given measure.
-         */
-        public getColorForMeasure(objects: IDataViewObjects, measureKey: any): string {
-            // Note, this allocates the color from the scale regardless of if we use it or not which helps keep colors stable.
-            let scaleColor = this.colors.getColor(measureKey).value;
+    /**
+     * Gets the color for the given series value.
+     * If no explicit color or default color has been set then the color is
+     * allocated from the color scale for this series.
+     */
+    public getColorForSeriesValue(objects: IDataViewObjects, value: PrimitiveValue): string {
+        return (this.fillProp && DataViewObjects.getFillColor(objects, this.fillProp))
+            || this.defaultDataPointColor
+            || this.colors.getColor(String(value)).value;
+    }
 
-            return (this.fillProp && DataViewObjects.getFillColor(objects, this.fillProp))
-                || this.defaultDataPointColor
-                || scaleColor;
-        }
+    /**
+     * Gets the color for the given measure.
+     */
+    public getColorForMeasure(objects: IDataViewObjects, measureKey: any): string {
+        // Note, this allocates the color from the scale regardless of if we use it or not which helps keep colors stable.
+        let scaleColor = this.colors.getColor(measureKey).value;
 
-        public static normalizeSelector(selector: Selector, isSingleSeries?: boolean): Selector {
-            // For dynamic series charts, colors are set per category.  So, exclude any measure (metadata repetition) from the selector.
-            if (selector && (isSingleSeries || selector.data))
-                return { data: selector.data };
+        return (this.fillProp && DataViewObjects.getFillColor(objects, this.fillProp))
+            || this.defaultDataPointColor
+            || scaleColor;
+    }
 
-            return selector;
-        }
+    public static normalizeSelector(selector: Selector, isSingleSeries?: boolean): Selector {
+        // For dynamic series charts, colors are set per category.  So, exclude any measure (metadata repetition) from the selector.
+        if (selector && (isSingleSeries || selector.data))
+            return { data: selector.data };
+
+        return selector;
     }
 }
