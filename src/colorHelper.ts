@@ -27,6 +27,7 @@
 import { dataViewObjects } from "powerbi-visuals-utils-dataviewutils";
 
 // powerbi
+import powerbi from "powerbi-visuals-tools";
 import DataViewObjectPropertyIdentifier = powerbi.DataViewObjectPropertyIdentifier;
 import IDataViewObjects = powerbi.DataViewObjects;
 import PrimitiveValue = powerbi.PrimitiveValue;

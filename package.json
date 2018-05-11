@@ -28,7 +28,7 @@
     "lint": "tslint -r \"node_modules/tslint-microsoft-contrib\"  \"+(src|test)/**/*.ts\""
   },
   "devDependencies": {
-    "@types/powerbi-visuals-tools": "https://github.com/zBritva/-types-powerbi-visuals-tools",
+    "@types/powerbi-visuals-tools": "1.11.0",
     "@types/jasmine": "2.5.51",
     "coveralls": "2.13.1",
     "jasmine": "2.6.0",

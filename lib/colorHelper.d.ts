@@ -1,4 +1,5 @@
 /// <reference types="powerbi-visuals-tools" />
+import powerbi from "powerbi-visuals-tools";
 import DataViewObjectPropertyIdentifier = powerbi.DataViewObjectPropertyIdentifier;
 import IDataViewObjects = powerbi.DataViewObjects;
 import PrimitiveValue = powerbi.PrimitiveValue;
