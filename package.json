@@ -1,6 +1,6 @@
 {
   "name": "powerbi-visuals-utils-colorutils",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "ColorUtils",
   "main": "lib/index",
   "types": "lib/index",
