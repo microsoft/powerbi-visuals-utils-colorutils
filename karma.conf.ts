@@ -100,8 +100,7 @@ module.exports = (config: Config) => {
         remapIstanbulReporter: {
             reports: {
                 lcovonly: coverageFolder + "/lcov.info",
-                html: coverageFolder,
-                "text-summary": null
+                html: coverageFolder
             }
         },
         mime: {
@@ -110,6 +109,6 @@ module.exports = (config: Config) => {
         webpack: webpackConfig,
         webpackMiddleware: {
             stats: "errors-only"
-          }
+        }
     });
 };
