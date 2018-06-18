@@ -1,26 +1,23 @@
 {
-    "compilerOptions": {
-        "allowJs": false,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "declaration": true,
-        "sourceMap": true,
-        "module": "ES2015",
-        "moduleResolution": "node",
-        "target": "ES2015",
-        "lib": [
-            "es2015",
-            "dom"
-        ],
-        "outDir": "./lib"
-    },
-    "files": [
-        "node_modules/powerbi-visuals-utils-dataviewutils/lib/index.d.ts",
-        "node_modules/powerbi-visuals-utils-typeutils/lib/index.d.ts",
-        "src/colorHelper.ts",
-        "src/colorUtils.ts"
+  "compilerOptions": {
+    "allowJs": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "declaration": true,
+    "sourceMap": true,
+    "module": "ES2015",
+    "moduleResolution": "node",
+    "target": "ES2015",
+    "lib": [
+      "es2015",
+      "dom"
     ],
-    "include": [
-        "src/index.ts"
-    ]
+    "outDir": "./lib"
+  },
+  "files": [
+    "src/index.ts"
+  ],
+  "include": [
+    "src/index.ts"
+  ]
 }
