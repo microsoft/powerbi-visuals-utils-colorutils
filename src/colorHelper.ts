@@ -72,7 +72,7 @@ module powerbi.extensibility.utils.color {
             themeColorName?: ThemeColorName,
         ): string {
             if (this.isHighContrast) {
-                return this.getHighContrastDataColor(themeColorName);
+                return this.getThemeColor(themeColorName);
             }
 
             return (this.fillProp && DataViewObjects.getFillColor(objects, this.fillProp))
@@ -89,7 +89,7 @@ module powerbi.extensibility.utils.color {
             themeColorName?: ThemeColorName,
         ): string {
             if (this.isHighContrast) {
-                return this.getHighContrastDataColor(themeColorName);
+                return this.getThemeColor(themeColorName);
             }
 
             // Note, this allocates the color from the scale regardless of if we use it or not which helps keep colors stable.
@@ -100,14 +100,16 @@ module powerbi.extensibility.utils.color {
                 || scaleColor;
         }
 
-        /**
-         * Returns color value to override data color in high contrast mode.
-         * Visuals should provide theme color name for specific behavior; otherwise will fallback to foreground color.
-         */
-        private getHighContrastDataColor(themeColorName: ThemeColorName = "foreground"): string {
+        public getThemeColor(themeColorName: ThemeColorName = "background"): string {
             return this.colorPalette
                 && this.colorPalette[themeColorName]
                 && this.colorPalette[themeColorName].value;
+        }
+
+        public getHighContrastColor(themeColorName: ThemeColorName = "background", defaultColor?: string): string {
+            return this.isHighContrast
+                ? this.getThemeColor(themeColorName)
+                : defaultColor;
         }
     }
 }
