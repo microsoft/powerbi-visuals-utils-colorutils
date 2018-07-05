@@ -35,18 +35,30 @@ module powerbi.extensibility.utils.color {
 
     // powerbi.extensibility
     import IColorPalette = powerbi.extensibility.IColorPalette;
+    import ISandboxExtendedColorPalette = powerbi.extensibility.ISandboxExtendedColorPalette;
 
     import DataViewObjects = powerbi.extensibility.utils.dataview.DataViewObjects;
 
-    export class ColorHelper {
-        private fillProp: DataViewObjectPropertyIdentifier;
-        private defaultDataPointColor: string;
-        private colors: IColorPalette;
+    export type ThemeColorName = keyof ISandboxExtendedColorPalette;
 
-        constructor(colors: IColorPalette, fillProp?: DataViewObjectPropertyIdentifier, defaultDataPointColor?: string) {
-            this.colors = colors;
-            this.fillProp = fillProp;
-            this.defaultDataPointColor = defaultDataPointColor;
+    export class ColorHelper {
+        constructor(
+            private colorPalette: IColorPalette | ISandboxExtendedColorPalette,
+            private fillProp?: DataViewObjectPropertyIdentifier,
+            private defaultDataPointColor?: string
+        ) { }
+
+        public static normalizeSelector(selector: Selector, isSingleSeries?: boolean): Selector {
+            // For dynamic series charts, colors are set per category.  So, exclude any measure (metadata repetition) from the selector.
+            if (selector && (isSingleSeries || selector.data)) {
+                return { data: selector.data };
+            }
+
+            return selector;
+        }
+
+        public get isHighContrast(): boolean {
+            return !!(this.colorPalette && (this.colorPalette as ISandboxExtendedColorPalette).isHighContrast);
         }
 
         /**
@@ -54,30 +66,48 @@ module powerbi.extensibility.utils.color {
          * If no explicit color or default color has been set then the color is
          * allocated from the color scale for this series.
          */
-        public getColorForSeriesValue(objects: IDataViewObjects, value: PrimitiveValue): string {
+        public getColorForSeriesValue(
+            objects: IDataViewObjects,
+            value: PrimitiveValue,
+            themeColorName?: ThemeColorName,
+        ): string {
+            if (this.isHighContrast) {
+                return this.getHighContrastDataColor(themeColorName);
+            }
+
             return (this.fillProp && DataViewObjects.getFillColor(objects, this.fillProp))
                 || this.defaultDataPointColor
-                || this.colors.getColor(String(value)).value;
+                || this.colorPalette.getColor(`${value}`).value;
         }
 
         /**
          * Gets the color for the given measure.
          */
-        public getColorForMeasure(objects: IDataViewObjects, measureKey: any): string {
+        public getColorForMeasure(
+            objects: IDataViewObjects,
+            measureKey: any,
+            themeColorName?: ThemeColorName,
+        ): string {
+            if (this.isHighContrast) {
+                return this.getHighContrastDataColor(themeColorName);
+            }
+
             // Note, this allocates the color from the scale regardless of if we use it or not which helps keep colors stable.
-            let scaleColor = this.colors.getColor(measureKey).value;
+            const scaleColor: string = this.colorPalette.getColor(measureKey).value;
 
             return (this.fillProp && DataViewObjects.getFillColor(objects, this.fillProp))
                 || this.defaultDataPointColor
                 || scaleColor;
         }
 
-        public static normalizeSelector(selector: Selector, isSingleSeries?: boolean): Selector {
-            // For dynamic series charts, colors are set per category.  So, exclude any measure (metadata repetition) from the selector.
-            if (selector && (isSingleSeries || selector.data))
-                return { data: selector.data };
-
-            return selector;
+        /**
+         * Returns color value to override data color in high contrast mode.
+         * Visuals should provide theme color name for specific behavior; otherwise will fallback to foreground color.
+         */
+        private getHighContrastDataColor(themeColorName: ThemeColorName = "foreground"): string {
+            return this.colorPalette
+                && this.colorPalette[themeColorName]
+                && this.colorPalette[themeColorName].value;
         }
     }
 }
