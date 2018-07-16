@@ -27,7 +27,7 @@
 import { dataViewObjects } from "powerbi-visuals-utils-dataviewutils";
 
 // powerbi
-import powerbi from "powerbi-visuals-tools";
+import powerbi from "powerbi-visuals-api";
 import DataViewObjectPropertyIdentifier = powerbi.DataViewObjectPropertyIdentifier;
 import IDataViewObjects = powerbi.DataViewObjects;
 import PrimitiveValue = powerbi.PrimitiveValue;
@@ -37,16 +37,19 @@ import Selector = powerbi.data.Selector;
 
 // powerbi.extensibility
 import IColorPalette = powerbi.extensibility.IColorPalette;
+import ISandboxExtendedColorPalette = powerbi.extensibility.ISandboxExtendedColorPalette;
+
+export type ThemeColorName = keyof ISandboxExtendedColorPalette;
 
 import DataViewObjects = dataViewObjects.DataViewObjects;
 
 export class ColorHelper {
     private fillProp: DataViewObjectPropertyIdentifier;
     private defaultDataPointColor: string;
-    private colors: IColorPalette;
+    private colorPalette: IColorPalette | ISandboxExtendedColorPalette;
 
-    constructor(colors: IColorPalette, fillProp?: DataViewObjectPropertyIdentifier, defaultDataPointColor?: string) {
-        this.colors = colors;
+    constructor(colors: IColorPalette | ISandboxExtendedColorPalette, fillProp?: DataViewObjectPropertyIdentifier, defaultDataPointColor?: string) {
+        this.colorPalette = colors;
         this.fillProp = fillProp;
         this.defaultDataPointColor = defaultDataPointColor;
     }
@@ -56,18 +59,25 @@ export class ColorHelper {
      * If no explicit color or default color has been set then the color is
      * allocated from the color scale for this series.
      */
-    public getColorForSeriesValue(objects: IDataViewObjects, value: PrimitiveValue): string {
+    public getColorForSeriesValue(objects: IDataViewObjects, value: PrimitiveValue, themeColorName?: ThemeColorName): string {
+        if (this.isHighContrast) {
+            return this.getThemeColor(themeColorName);
+        }
+
         return (this.fillProp && DataViewObjects.getFillColor(objects, this.fillProp))
             || this.defaultDataPointColor
-            || this.colors.getColor(String(value)).value;
+            || this.colorPalette.getColor(String(value)).value;
     }
 
     /**
      * Gets the color for the given measure.
      */
-    public getColorForMeasure(objects: IDataViewObjects, measureKey: any): string {
+    public getColorForMeasure(objects: IDataViewObjects, measureKey: any, themeColorName?: ThemeColorName): string {
+        if (this.isHighContrast) {
+            return this.getThemeColor(themeColorName);
+        }
         // Note, this allocates the color from the scale regardless of if we use it or not which helps keep colors stable.
-        let scaleColor = this.colors.getColor(measureKey).value;
+        const scaleColor = this.colorPalette.getColor(measureKey).value;
 
         return (this.fillProp && DataViewObjects.getFillColor(objects, this.fillProp))
             || this.defaultDataPointColor
@@ -76,9 +86,26 @@ export class ColorHelper {
 
     public static normalizeSelector(selector: Selector, isSingleSeries?: boolean): Selector {
         // For dynamic series charts, colors are set per category.  So, exclude any measure (metadata repetition) from the selector.
-        if (selector && (isSingleSeries || selector.data))
+        if (selector && (isSingleSeries || selector.data)) {
             return { data: selector.data };
+        }
 
         return selector;
+    }
+
+    public get isHighContrast(): boolean {
+        return !!(this.colorPalette && (this.colorPalette as ISandboxExtendedColorPalette).isHighContrast);
+    }
+
+    public getThemeColor(themeColorName: ThemeColorName = "background"): string {
+        return this.colorPalette
+            && this.colorPalette[themeColorName]
+            && this.colorPalette[themeColorName].value;
+    }
+
+    public getHighContrastColor(themeColorName: ThemeColorName = "background", defaultColor?: string): string {
+        return this.isHighContrast
+            ? this.getThemeColor(themeColorName)
+            : defaultColor;
     }
 }
