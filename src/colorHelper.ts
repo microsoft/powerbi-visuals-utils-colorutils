@@ -86,8 +86,8 @@ export class ColorHelper {
 
     public static normalizeSelector(selector: Selector, isSingleSeries?: boolean): Selector {
         // For dynamic series charts, colors are set per category.  So, exclude any measure (metadata repetition) from the selector.
-        if (selector && (isSingleSeries || selector.data)) {
-            return { data: selector.data };
+        if (selector && (isSingleSeries || (<any>selector).data)) {
+            return { data: (<any>selector).data };
         }
 
         return selector;
