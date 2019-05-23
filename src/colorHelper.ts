@@ -41,8 +41,6 @@ import ISandboxExtendedColorPalette = powerbi.extensibility.ISandboxExtendedColo
 
 export type ThemeColorName = keyof ISandboxExtendedColorPalette;
 
-import DataViewObjects = dataViewObjects.DataViewObjects;
-
 export class ColorHelper {
     private fillProp: DataViewObjectPropertyIdentifier;
     private defaultDataPointColor: string;
@@ -64,7 +62,7 @@ export class ColorHelper {
             return this.getThemeColor(themeColorName);
         }
 
-        return (this.fillProp && DataViewObjects.getFillColor(objects, this.fillProp))
+        return (this.fillProp && dataViewObjects.getFillColor(objects, this.fillProp))
             || this.defaultDataPointColor
             || this.colorPalette.getColor(String(value)).value;
     }
@@ -79,7 +77,7 @@ export class ColorHelper {
         // Note, this allocates the color from the scale regardless of if we use it or not which helps keep colors stable.
         const scaleColor = this.colorPalette.getColor(measureKey).value;
 
-        return (this.fillProp && DataViewObjects.getFillColor(objects, this.fillProp))
+        return (this.fillProp && dataViewObjects.getFillColor(objects, this.fillProp))
             || this.defaultDataPointColor
             || scaleColor;
     }
