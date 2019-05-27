@@ -1,9 +1,9 @@
-## 1.2.0
+## 2.2.0
 * Update packages to fix vulnerabilities
+* Update powerbi-visuals-api to 2.6.0
 
-## 1.1.0
-* High contrast mode
-* API 1.13.0
+## 2.1.0
+* Update packages to fix vulnerabilities
 
 ## 1.0.0
 * Update packages

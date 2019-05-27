@@ -24,6 +24,31 @@
  *  THE SOFTWARE.
  */
 
-/// <reference path="../node_modules/powerbi-visuals-tools/templates/visuals/.api/v1.13.0/PowerBI-visuals.d.ts" />
-/// <reference path="../node_modules/powerbi-visuals-utils-testutils/lib/index.d.ts" />
-/// <reference path="../lib/index.d.ts" />
+const path = require('path');
+
+module.exports = {
+    entry: './src/index.ts',
+    devtool: 'source-map',
+    module: {
+        rules: [
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/
+            },
+            {
+                test: /\.json$/,
+                loader: 'json-loader'
+              }
+        ]
+    },
+    externals: {
+        "powerbi-visuals-api": '{}'
+    },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js','.css']
+    },
+    output: {
+        path: path.resolve(__dirname, ".tmp/test")
+    }
+};
