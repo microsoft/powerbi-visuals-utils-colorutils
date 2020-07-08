@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/jasmine": "3.5.11",
     "@types/karma": "^5.0.0",
-    "@types/webpack": "^4.41.18",
+    "@types/webpack": "^4.41.21",
     "coveralls": "^3.1.0",
     "jasmine": "3.5.0",
     "karma": "5.1.0",
@@ -54,7 +54,7 @@
     "webpack": "4.43.0"
   },
   "dependencies": {
-    "powerbi-visuals-utils-dataviewutils": "2.2.1",
+    "powerbi-visuals-utils-dataviewutils": "2.3.0",
     "powerbi-visuals-utils-typeutils": "2.3.0"
   }
 }
