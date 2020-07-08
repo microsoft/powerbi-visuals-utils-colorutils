@@ -1,3 +1,9 @@
+## 2.3.0
+* Packages update
+* JQuery dependency removed
+* Obsolete docs removed
+* Github actions added
+
 ## 2.2.1
 * Packages update
 
