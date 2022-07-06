@@ -11,13 +11,19 @@ jobs:
       GH_TOKEN: ${{secrets.GH_TOKEN}}
     steps:
     - uses: actions/checkout@v2
+    - name: "call action"
+      id: last_release
+      uses: InsonusK/get-latest-release@v1.0.1
+      with:
+        myToken: ${{ github.token }}
+        view_top: 1
     - name: Move release to draft
       id: info
       run: |
-        release=$(gh release view --json tagName)
-        value=$(echo $release | jq -r '.tagName')
-        gh release edit $value --draft=true
-        echo "::set-output name=tag-name::$value"
+        echo ${{steps.last_release.outputs.tagName}}
+        release=$(gh release view --json tagName -q '.tagName')
+        gh release edit $release --draft=true
+        echo "::set-output name=tag-name::$release"
     - name: Run npm install, build and test
       run: |
         npm i
