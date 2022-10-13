@@ -52,7 +52,6 @@ module.exports = (config) => {
         },
         singleRun: true,
         plugins: [
-            "karma-remap-istanbul",
             "karma-coverage",
             "karma-typescript",
             "karma-webpack",
@@ -62,8 +61,6 @@ module.exports = (config) => {
             "karma-coverage-istanbul-reporter"
         ],
         files: [
-            "node_modules/jquery/dist/jquery.min.js",
-            "node_modules/jasmine-jquery/lib/jasmine-jquery.js",
             srcCssRecursivePath,
             srcRecursivePath,
             testRecursivePath,
