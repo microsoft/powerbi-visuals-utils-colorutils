@@ -37,7 +37,7 @@ export function hexToRGBString(hex: string, transparency?: number): string {
     // Hex format which return the format r-g-b
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 
-    let rgb = result ? {
+    const rgb = result ? {
         r: parseInt(result[1], 16),
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16)
@@ -60,15 +60,15 @@ export function rotate(rgbString: string, rotateFactor: number): string {
     if (rotateFactor === 0)
         return rgbString;
 
-    let originalRgb = parseColorString(rgbString);
-    let originalHsv = rgbToHsv(originalRgb);
-    let rotatedHsv = rotateHsv(originalHsv, rotateFactor);
-    let rotatedRgb = hsvToRgb(rotatedHsv);
+    const originalRgb = parseColorString(rgbString);
+    const originalHsv = rgbToHsv(originalRgb);
+    const rotatedHsv = rotateHsv(originalHsv, rotateFactor);
+    const rotatedRgb = hsvToRgb(rotatedHsv);
     return hexString(rotatedRgb);
 }
 
 export function normalizeToHexString(color: string): string {
-    let rgb = parseColorString(color);
+    const rgb = parseColorString(color);
     return hexString(rgb);
 }
 
@@ -76,7 +76,7 @@ export function parseColorString(color: string): RgbColor {
     if (color.indexOf("#") >= 0) {
         if (color.length === 7) {
             // #RRGGBB
-            let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
             if (result == null || result.length < 4)
                 return;
 
@@ -87,7 +87,7 @@ export function parseColorString(color: string): RgbColor {
             };
         } else if (color.length === 4) {
             // #RGB
-            let result = /^#?([a-f\d])([a-f\d])([a-f\d])$/i.exec(color);
+            const result = /^#?([a-f\d])([a-f\d])([a-f\d])$/i.exec(color);
             if (result == null || result.length < 4)
                 return;
 
@@ -100,7 +100,7 @@ export function parseColorString(color: string): RgbColor {
     }
     else if (color.indexOf("rgb(") >= 0) {
         // rgb(R, G, B)
-        let result = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/.exec(color);
+        const result = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/.exec(color);
         if (result == null || result.length < 4)
             return;
 
@@ -112,7 +112,7 @@ export function parseColorString(color: string): RgbColor {
     }
     else if (color.indexOf("rgba(") >= 0) {
         // rgba(R, G, B, A)
-        let result = /^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d*(?:\.\d+)?)\)$/.exec(color);
+        const result = /^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d*(?:\.\d+)?)\)$/.exec(color);
         if (result == null || result.length < 5)
             return;
 
@@ -127,15 +127,15 @@ export function parseColorString(color: string): RgbColor {
 
 function rgbToHsv(rgbColor: RgbColor): HsvColor {
     let s, h;
-    let r = rgbColor.R / 255,
+    const r = rgbColor.R / 255,
         g = rgbColor.G / 255,
         b = rgbColor.B / 255;
 
-    let min = Math.min(r, Math.min(g, b));
-    let max = Math.max(r, Math.max(g, b));
+    const min = Math.min(r, Math.min(g, b));
+    const max = Math.max(r, Math.max(g, b));
 
-    let v = max;
-    let delta = max - min;
+    const v = max;
+    const delta = max - min;
     if (max === 0 || delta === 0) {
         // R, G, and B must be 0.0, or all the same.
         // In this case, S is 0.0, and H is undefined.
@@ -176,7 +176,7 @@ function rgbToHsv(rgbColor: RgbColor): HsvColor {
 
 function hsvToRgb(hsvColor: HsvColor): RgbColor {
     let r, g, b;
-    let h = hsvColor.H,
+    const h = hsvColor.H,
         s = hsvColor.S,
         v = hsvColor.V;
 
@@ -188,23 +188,21 @@ function hsvToRgb(hsvColor: HsvColor): RgbColor {
         b = v;
     }
     else {
-        let p, q, t, fractionalSector, sectorNumber, sectorPos;
-
         // The color wheel consists of 6 sectors.
         // Figure out which sector you//re in.
-        sectorPos = h * 6;
-        sectorNumber = Math.floor(sectorPos);
+        const sectorPos = h * 6;
+        const sectorNumber = Math.floor(sectorPos);
 
         // get the fractional part of the sector.
         // That is, how many degrees into the sector
         // are you?
-        fractionalSector = sectorPos - sectorNumber;
+        const fractionalSector = sectorPos - sectorNumber;
 
         // Calculate values for the three axes
         // of the color.
-        p = v * (1.0 - s);
-        q = v * (1.0 - (s * fractionalSector));
-        t = v * (1.0 - (s * (1 - fractionalSector)));
+        const p = v * (1.0 - s);
+        const q = v * (1.0 - (s * fractionalSector));
+        const t = v * (1.0 - (s * (1 - fractionalSector)));
 
         // Assign the fractional colors to r, g, and b
         // based on the sector the angle is in.
@@ -255,7 +253,7 @@ function hsvToRgb(hsvColor: HsvColor): RgbColor {
 }
 
 function rotateHsv(hsvColor: HsvColor, rotateFactor: number): HsvColor {
-    let newH = hsvColor.H + rotateFactor;
+    const newH = hsvColor.H + rotateFactor;
 
     return {
         H: newH > 1 ? newH - 1 : newH,
@@ -265,7 +263,7 @@ function rotateHsv(hsvColor: HsvColor, rotateFactor: number): HsvColor {
 }
 
 export function darken(color: RgbColor, diff: number): RgbColor {
-    let flooredNumber = Math.floor(diff);
+    const flooredNumber = Math.floor(diff);
     return {
         R: Math.max(0, color.R - flooredNumber),
         G: Math.max(0, color.G - flooredNumber),
@@ -340,7 +338,7 @@ export function channelBlend(foreChannel: number, opacity: number, backChannel: 
  * @returns result highlight color value
  */
 export function calculateHighlightColor(rgbColor: RgbColor, lumianceThreshold: number, delta: number): string {
-    let hsvColor = rgbToHsv(rgbColor);
+    const hsvColor = rgbToHsv(rgbColor);
 
     // For invalid lumianceThreshold and delta value, use default.
     if (lumianceThreshold + delta > 1 || lumianceThreshold <= 0 || delta <= 0) {
@@ -358,8 +356,8 @@ export function calculateHighlightColor(rgbColor: RgbColor, lumianceThreshold: n
 }
 
 function componentToHex(hexComponent: number): string {
-    let clamped = Double.ensureInRange(hexComponent, 0, 255);
-    let hex = clamped.toString(16).toUpperCase();
+    const clamped = Double.ensureInRange(hexComponent, 0, 255);
+    const hex = clamped.toString(16).toUpperCase();
     return hex.length === 1 ? "0" + hex : hex;
 }
 
@@ -381,7 +379,7 @@ export interface LinearColorScale {
 }
 
 export function createLinearColorScale(domain: number[], range: string[], clamp: boolean): LinearColorScale {
-    let rangeColors = range.map(v => parseColorString(v));
+    const rangeColors = range.map(v => parseColorString(v));
 
     return value => {
         // treat undefined and NULL as 0
@@ -408,7 +406,7 @@ export function createLinearColorScale(domain: number[], range: string[], clamp:
                 break;
             }
         }
-        let newValue: RgbColor = {
+        const newValue: RgbColor = {
             R: Math.round((((value - domainMin) * (rangeMax.R - rangeMin.R)) / (domainMax - domainMin)) + rangeMin.R),
             G: Math.round((((value - domainMin) * (rangeMax.G - rangeMin.G)) / (domainMax - domainMin)) + rangeMin.G),
             B: Math.round((((value - domainMin) * (rangeMax.B - rangeMin.B)) / (domainMax - domainMin)) + rangeMin.B)
@@ -423,12 +421,12 @@ export function createLinearColorScale(domain: number[], range: string[], clamp:
  * Apply percentage for each channel and return back hex value as string with pound sign.
  */
 export function shadeColor(color: string, percent: number): string {
-    let hexNum = parseInt(color.slice(1), 16);
-    let t = percent < 0 ? 0 : 255;
-    let p = percent < 0 ? percent * -1 : percent;
-    let R = hexNum >> 16;
-    let G = hexNum >> 8 & 0x00FF;
-    let B = hexNum & 0x0000FF;
-    let hexString = "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
+    const hexNum = parseInt(color.slice(1), 16);
+    const t = percent < 0 ? 0 : 255;
+    const p = percent < 0 ? percent * -1 : percent;
+    const R = hexNum >> 16;
+    const G = hexNum >> 8 & 0x00FF;
+    const B = hexNum & 0x0000FF;
+    const hexString = "#" + (0x1000000 + (Math.round((t - R) * p) + R) * 0x10000 + (Math.round((t - G) * p) + G) * 0x100 + (Math.round((t - B) * p) + B)).toString(16).slice(1);
     return hexString;
 }
