@@ -35,7 +35,7 @@ const srcRecursivePath = "lib/**/*.js";
 const srcCssRecursivePath = "lib/**/*.css";
 const coverageFolder = "coverage";
 
-process.env.CHROME_BIN = require("playwright").chromium.executablePath();
+process.env.CHROME_BIN = require("playwright-chromium").chromium.executablePath();
 module.exports = (config) => {
     config.set({
         browsers: ["ChromeHeadless"],
