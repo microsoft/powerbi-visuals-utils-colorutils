@@ -1,8 +1,7 @@
-## 6.0.3
-* Packages update
-
 ## 6.0.2
 * Vulnerabilities fixed
+* Packages update
+* Update build.yml to use node 18, 20
 
 ## 6.0.1
 * Packages update
