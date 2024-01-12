@@ -1,4 +1,4 @@
-#git@github.com:adiletelf/powerbi-visuals-utils-colorutils.git Microsoft Power BI visuals ColorUtils
+# Microsoft Power BI visuals ColorUtils
 ![Build](https://github.com/microsoft/powerbi-visuals-utils-colorutils/workflows/build/badge.svg) [![npm version](https://img.shields.io/npm/v/powerbi-visuals-utils-colorutils.svg)](https://www.npmjs.com/package/powerbi-visuals-utils-colorutils) [![npm](https://img.shields.io/npm/dm/powerbi-visuals-utils-colorutils.svg)](https://www.npmjs.com/package/powerbi-visuals-utils-colorutils)
 
 > ColorUtils is a set of functions and classes in order to simplify color manipulations for Power BI custom visuals
