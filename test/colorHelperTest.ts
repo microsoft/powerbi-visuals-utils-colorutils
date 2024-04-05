@@ -188,10 +188,10 @@ describe("Color Helper", () => {
             expect(colorHelper.getThemeColor("background")).toBeUndefined();
         });
 
-        it("should return undefined if background is not defined", () => {
+        it("should return #FFF if background is not defined", () => {
             const colorHelper: ColorHelper = new ColorHelper(colorPalette);
 
-            expect(colorHelper.getThemeColor("background")).toBeUndefined();
+            expect(colorHelper.getThemeColor("background")).toBe("#FFF");
         });
 
         it("should return color if background is defined", () => {
