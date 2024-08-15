@@ -1,6 +1,6 @@
 {
   "name": "powerbi-visuals-utils-colorutils",
-  "version": "6.0.4",
+  "version": "6.0.5",
   "description": "ColorUtils",
   "main": "lib/index",
   "types": "lib/index",
@@ -36,8 +36,8 @@
     "coverage-istanbul-loader": "^3.0.5",
     "eslint": "^8.57.0",
     "eslint-plugin-powerbi-visuals": "^0.8.1",
-    "jasmine": "^5.1.0",
-    "karma": "^6.4.3",
+    "jasmine": "^5.2.0",
+    "karma": "^6.4.4",
     "karma-chrome-launcher": "^3.2.0",
     "karma-coverage": "2.2.1",
     "karma-coverage-istanbul-reporter": "3.0.3",
@@ -46,16 +46,16 @@
     "karma-typescript": "^5.5.4",
     "karma-typescript-preprocessor": "^0.4.0",
     "karma-webpack": "^5.0.1",
-    "playwright-chromium": "1.40.1",
-    "powerbi-visuals-api": "^5.9.0",
+    "playwright-chromium": "1.46.0",
+    "powerbi-visuals-api": "^5.11.0",
     "powerbi-visuals-utils-testutils": "^6.1.1",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "4.9.5",
-    "webpack": "^5.91.0"
+    "webpack": "^5.93.0"
   },
   "dependencies": {
-    "powerbi-visuals-utils-dataviewutils": "^6.0.3",
+    "powerbi-visuals-utils-dataviewutils": "^6.1.0",
     "powerbi-visuals-utils-typeutils": "^6.0.3"
   }
 }
