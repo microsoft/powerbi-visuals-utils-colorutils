@@ -1,8 +1,8 @@
-name: build
+name: release
 
 on:
   release:
-    types: [created]
+    types: [ created ]
 
 permissions:
   contents: write
@@ -10,38 +10,45 @@ permissions:
 jobs:
   build:
     environment: automated-release
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
-    env: 
-      GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v6
 
-      - name: Move release to draft
-        run: gh release edit "$TAG_NAME" --draft=true
-        env:
-          TAG_NAME: ${{ github.event.release.tag_name }}
-      - name: Install dependencies
-        run: npm ci
+    - name: Use Node.js 20
+      uses: actions/setup-node@v6
+      with:
+        node-version: 20.x
+        cache: "npm"
 
-      - name: Build
-        run: npm run build
+    - name: Move release to draft
+      run: gh release edit "$TAG_NAME" --draft=true
+      env:
+        TAG_NAME: ${{ github.event.release.tag_name }}
 
-      - name: Test
-        run: npm run test
+    - name: Install dependencies
+      run: npm ci
 
-      - name: Lint
-        run: npm run lint
+    - name: Lint
+      run: npm run lint
 
-      - name: Create lib archive
-        run: |
-          zip -r lib.zip lib *.md LICENSE SECURITY.md package.json package-lock.json -x 'lib/test/*' 'lib/src/*'
+    - name: Build
+      run: npm run build
 
-      - name: Upload production artifacts
-        run: |
-          gh release upload $TAG_NAME "lib.zip"
-          gh release edit $TAG_NAME --draft=false
-        env:
-          TAG_NAME: ${{ github.event.release.tag_name }}
+    - name: Test
+      run: npm test
+
+    - name: Create release archive
+      run: |
+        zip -r lib.zip lib *.md LICENSE package.json package-lock.json
+
+    - name: Upload production artifacts
+      run: |
+        gh release upload "$TAG_NAME" "lib.zip"
+        gh release edit "$TAG_NAME" --draft=false
+      env:
+        TAG_NAME: ${{ github.event.release.tag_name }}

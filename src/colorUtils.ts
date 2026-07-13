@@ -61,6 +61,10 @@ export function rotate(rgbString: string, rotateFactor: number): string {
         return rgbString;
 
     const originalRgb = parseColorString(rgbString);
+    if (!originalRgb) {
+        return rgbString;
+    }
+
     const originalHsv = rgbToHsv(originalRgb);
     const rotatedHsv = rotateHsv(originalHsv, rotateFactor);
     const rotatedRgb = hsvToRgb(rotatedHsv);
@@ -69,16 +73,20 @@ export function rotate(rgbString: string, rotateFactor: number): string {
 
 export function normalizeToHexString(color: string): string {
     const rgb = parseColorString(color);
+    if (!rgb) {
+        return color;
+    }
+
     return hexString(rgb);
 }
 
-export function parseColorString(color: string): RgbColor {
+export function parseColorString(color: string): RgbColor | undefined {
     if (color.indexOf("#") >= 0) {
         if (color.length === 7) {
             // #RRGGBB
             const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(color);
             if (result == null || result.length < 4)
-                return;
+                return undefined;
 
             return {
                 R: parseInt(result[1], 16),
@@ -89,7 +97,7 @@ export function parseColorString(color: string): RgbColor {
             // #RGB
             const result = /^#?([a-f\d])([a-f\d])([a-f\d])$/i.exec(color);
             if (result == null || result.length < 4)
-                return;
+                return undefined;
 
             return {
                 R: parseInt(result[1] + result[1], 16),
@@ -102,7 +110,7 @@ export function parseColorString(color: string): RgbColor {
         // rgb(R, G, B)
         const result = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/.exec(color);
         if (result == null || result.length < 4)
-            return;
+            return undefined;
 
         return {
             R: parseInt(result[1], 10),
@@ -114,7 +122,7 @@ export function parseColorString(color: string): RgbColor {
         // rgba(R, G, B, A)
         const result = /^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d*(?:\.\d+)?)\)$/.exec(color);
         if (result == null || result.length < 5)
-            return;
+            return undefined;
 
         return {
             R: parseInt(result[1], 10),
@@ -175,7 +183,9 @@ function rgbToHsv(rgbColor: RgbColor): HsvColor {
 }
 
 function hsvToRgb(hsvColor: HsvColor): RgbColor {
-    let r, g, b;
+    let r: number = 0;
+    let g: number = 0;
+    let b: number = 0;
     const h = hsvColor.H,
         s = hsvColor.S,
         v = hsvColor.V;
@@ -242,6 +252,11 @@ function hsvToRgb(hsvColor: HsvColor): RgbColor {
                 g = p;
                 b = q;
                 break;
+            default:
+                r = v;
+                g = p;
+                b = q;
+                break;
         }
     }
 
@@ -289,10 +304,17 @@ export function hexString(color: RgbColor): string {
  * @returns Result color
  */
 export function hexBlend(foreColor: string, opacity: number, backColor: string): string {
+    const fore = parseColorString(foreColor);
+    const back = parseColorString(backColor);
+
+    if (!fore || !back) {
+        return backColor;
+    }
+
     return hexString(rgbBlend(
-        parseColorString(foreColor),
+        fore,
         opacity,
-        parseColorString(backColor)));
+        back));
 }
 
 /**
@@ -375,7 +397,7 @@ interface HsvColor {
 }
 
 export interface LinearColorScale {
-    (value: number): string;
+    (value: number): string | undefined;
 }
 
 export function createLinearColorScale(domain: number[], range: string[], clamp: boolean): LinearColorScale {
@@ -394,7 +416,10 @@ export function createLinearColorScale(domain: number[], range: string[], clamp:
             if (value >= domain[domain.length - 1]) return range[range.length - 1];
             if (value <= domain[0]) return range[0];
         }
-        let domainMin: number, domainMax: number, rangeMin: RgbColor, rangeMax: RgbColor;
+        let domainMin: number = domain[0];
+        let domainMax: number = domain[1] ?? domain[0];
+        let rangeMin: RgbColor | undefined = rangeColors[0];
+        let rangeMax: RgbColor | undefined = rangeColors[1] ?? rangeColors[0];
         for (let i = 1, len = domain.length; i < len; i++) {
             domainMin = domain[i - 1];
             domainMax = domain[i];
@@ -406,6 +431,11 @@ export function createLinearColorScale(domain: number[], range: string[], clamp:
                 break;
             }
         }
+
+        if (!rangeMin || !rangeMax || domainMax === domainMin) {
+            return range[0];
+        }
+
         const newValue: RgbColor = {
             R: Math.round((((value - domainMin) * (rangeMax.R - rangeMin.R)) / (domainMax - domainMin)) + rangeMin.R),
             G: Math.round((((value - domainMin) * (rangeMax.G - rangeMin.G)) / (domainMax - domainMin)) + rangeMin.G),
