@@ -1,6 +1,10 @@
 ## 7.0.0
 
 ### Breaking changes
+* Public API: `parseColorString` now returns `RgbColor | undefined` (previously `RgbColor`); callers must handle `undefined` for unparseable color strings.
+* Public API: `getThemeColor` and `getHighContrastColor` now return `string | undefined` (previously `string`) when the color palette is not available.
+* Public API: `LinearColorScale` and `createLinearColorScale` now return `string | undefined` (previously `string`); the scale returns `undefined` for `NaN` values.
+* Public API: `getColorForSeriesValue` and `getColorForMeasure` now throw an `Error` when the color palette is not initialized (previously failed with a raw `TypeError`). Constructing `ColorHelper` without a palette remains supported for probing `isHighContrast`/`getThemeColor`; only the color-allocating methods require a palette.
 * Test runner migrated from Karma + Jasmine to Vitest.
 * Development/build TypeScript upgraded to 6.x.
 

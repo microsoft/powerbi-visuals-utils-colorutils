@@ -31,6 +31,7 @@ import powerbi from "powerbi-visuals-api";
 import DataViewObjectPropertyIdentifier = powerbi.DataViewObjectPropertyIdentifier;
 import IDataViewObjects = powerbi.DataViewObjects;
 import PrimitiveValue = powerbi.PrimitiveValue;
+import IColorInfo = powerbi.IColorInfo;
 
 // powerbi.data
 import Selector = powerbi.data.Selector;
@@ -46,6 +47,13 @@ export class ColorHelper {
     private defaultDataPointColor?: string;
     private colorPalette: IColorPalette | ISandboxExtendedColorPalette | undefined;
 
+    /**
+     * @param colors Optional color palette. Palette-less construction is intentionally supported so that
+     * consumers can safely probe {@link isHighContrast} and {@link getThemeColor} before a palette is available
+     * (behavior relied upon since high-contrast support was added). When the palette is omitted, `getThemeColor`
+     * and `getHighContrastColor` return `undefined`, and `getColorForSeriesValue`/`getColorForMeasure` throw
+     * because they cannot allocate a color without a palette.
+     */
     constructor(colors?: IColorPalette | ISandboxExtendedColorPalette, fillProp?: DataViewObjectPropertyIdentifier, defaultDataPointColor?: string) {
         this.colorPalette = colors;
         this.fillProp = fillProp;
@@ -135,10 +143,10 @@ export class ColorHelper {
             return undefined;
         }
 
-        const extendedPalette: ISandboxExtendedColorPalette = this.colorPalette as ISandboxExtendedColorPalette;
-        const themeColor: { value?: string } = (extendedPalette as unknown as Record<string, { value?: string }>)[themeColorName as string];
+        const palette: ISandboxExtendedColorPalette = this.colorPalette as ISandboxExtendedColorPalette;
+        const themeColor = palette[themeColorName] as IColorInfo | undefined;
 
-        return themeColor && themeColor.value;
+        return themeColor?.value;
     }
 
     public getHighContrastColor(themeColorName: ThemeColorName = "background", defaultColor?: string): string | undefined {

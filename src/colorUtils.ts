@@ -253,9 +253,11 @@ function hsvToRgb(hsvColor: HsvColor): RgbColor {
                 b = q;
                 break;
             default:
+                // Only reachable when sectorNumber === 6 (H === 1.0), which is
+                // equivalent to H === 0.0 and therefore maps to sector 0.
                 r = v;
-                g = p;
-                b = q;
+                g = t;
+                b = p;
                 break;
         }
     }
