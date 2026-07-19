@@ -5,6 +5,7 @@
 * Public API: `getThemeColor` and `getHighContrastColor` now return `string | undefined` (previously `string`) when the color palette is not available.
 * Public API: `LinearColorScale` and `createLinearColorScale` now return `string | undefined` (previously `string`); the scale returns `undefined` for `NaN` values.
 * Public API: `getColorForSeriesValue` and `getColorForMeasure` now throw an `Error` when the color palette is not initialized (previously failed with a raw `TypeError`). Constructing `ColorHelper` without a palette remains supported for probing `isHighContrast`/`getThemeColor`; only the color-allocating methods require a palette.
+* Behavior: in high-contrast mode, `getColorForSeriesValue`/`getColorForMeasure` now fall through to the fill/default/palette color when the theme color is empty or `undefined` (previously the theme color was returned unconditionally). Avoids a silent empty-string fallback.
 * Test runner migrated from Karma + Jasmine to Vitest.
 * Development/build TypeScript upgraded to 6.x.
 
