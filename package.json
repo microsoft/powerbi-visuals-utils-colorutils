@@ -1,9 +1,10 @@
 {
   "name": "powerbi-visuals-utils-colorutils",
-  "version": "6.0.6",
+  "version": "7.0.0",
   "description": "ColorUtils",
-  "main": "lib/index",
-  "types": "lib/index",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Microsoft/powerbi-visuals-utils-colorutils.git"
@@ -21,42 +22,29 @@
     "lib"
   ],
   "scripts": {
-    "build:map": "tsc --sourceMap",
     "build": "tsc",
-    "test": "karma start",
-    "pretest": "npm run build:map",
-    "lint": "npx eslint"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:typecheck": "tsc -p test/tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "@types/jasmine": "^5.1.15",
-    "@types/karma": "^6.3.9",
-    "@types/webpack": "^5.28.5",
-    "@typescript-eslint/eslint-plugin": "^8.59.4",
-    "@typescript-eslint/parser": "^8.59.4",
-    "coverage-istanbul-loader": "^3.0.5",
-    "eslint": "^9.39.4",
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.1.1",
+    "@typescript-eslint/eslint-plugin": "^8.63.0",
+    "@typescript-eslint/parser": "^8.63.0",
+    "@vitest/coverage-v8": "^4.1.10",
+    "eslint": "^10.6.0",
     "eslint-plugin-powerbi-visuals": "^1.1.1",
-    "jasmine": "^5.13.0",
-    "karma": "^6.4.4",
-    "karma-chrome-launcher": "^3.2.0",
-    "karma-coverage": "2.2.1",
-    "karma-coverage-istanbul-reporter": "3.0.3",
-    "karma-jasmine": "^5.1.0",
-    "karma-sourcemap-loader": "0.4.0",
-    "karma-typescript": "^5.5.4",
-    "karma-typescript-preprocessor": "^0.4.0",
-    "karma-webpack": "^5.0.1",
-    "playwright-chromium": "1.46.0",
     "powerbi-visuals-api": "^5.11.0",
-    "powerbi-visuals-utils-testutils": "^6.1.1",
-    "ts-loader": "^9.6.0",
-    "ts-node": "^10.9.2",
-    "typescript": "5.9.3",
-    "webpack": "^5.107.2",
-    "typescript-eslint": "^8.59.4"
+    "powerbi-visuals-utils-testutils": "^7.0.1",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
   },
   "dependencies": {
-    "powerbi-visuals-utils-dataviewutils": "^6.1.0",
-    "powerbi-visuals-utils-typeutils": "^6.0.3"
+    "powerbi-visuals-utils-dataviewutils": "^7.0.0",
+    "powerbi-visuals-utils-typeutils": "^7.0.0"
   }
 }

@@ -31,6 +31,7 @@ import powerbi from "powerbi-visuals-api";
 import DataViewObjectPropertyIdentifier = powerbi.DataViewObjectPropertyIdentifier;
 import IDataViewObjects = powerbi.DataViewObjects;
 import PrimitiveValue = powerbi.PrimitiveValue;
+import IColorInfo = powerbi.IColorInfo;
 
 // powerbi.data
 import Selector = powerbi.data.Selector;
@@ -42,11 +43,18 @@ import ISandboxExtendedColorPalette = powerbi.extensibility.ISandboxExtendedColo
 export type ThemeColorName = keyof ISandboxExtendedColorPalette;
 
 export class ColorHelper {
-    private fillProp: DataViewObjectPropertyIdentifier;
-    private defaultDataPointColor: string;
-    private colorPalette: IColorPalette | ISandboxExtendedColorPalette;
+    private fillProp?: DataViewObjectPropertyIdentifier;
+    private defaultDataPointColor?: string;
+    private colorPalette: IColorPalette | ISandboxExtendedColorPalette | undefined;
 
-    constructor(colors: IColorPalette | ISandboxExtendedColorPalette, fillProp?: DataViewObjectPropertyIdentifier, defaultDataPointColor?: string) {
+    /**
+     * @param colors Optional color palette. Palette-less construction is intentionally supported so that
+     * consumers can safely probe {@link isHighContrast} and {@link getThemeColor} before a palette is available
+     * (behavior relied upon since high-contrast support was added). When the palette is omitted, `getThemeColor`
+     * and `getHighContrastColor` return `undefined`, and `getColorForSeriesValue`/`getColorForMeasure` throw
+     * because they cannot allocate a color without a palette.
+     */
+    constructor(colors?: IColorPalette | ISandboxExtendedColorPalette, fillProp?: DataViewObjectPropertyIdentifier, defaultDataPointColor?: string) {
         this.colorPalette = colors;
         this.fillProp = fillProp;
         this.defaultDataPointColor = defaultDataPointColor;
@@ -57,29 +65,64 @@ export class ColorHelper {
      * If no explicit color or default color has been set then the color is
      * allocated from the color scale for this series.
      */
-    public getColorForSeriesValue(objects: IDataViewObjects, value: PrimitiveValue, themeColorName?: ThemeColorName): string {
+    public getColorForSeriesValue(objects: IDataViewObjects | null | undefined, value: PrimitiveValue, themeColorName?: ThemeColorName): string {
         if (this.isHighContrast) {
-            return this.getThemeColor(themeColorName);
+            const highContrastColor = this.getThemeColor(themeColorName);
+
+            if (highContrastColor) {
+                return highContrastColor;
+            }
         }
 
-        return (this.fillProp && dataViewObjects.getFillColor(objects, this.fillProp))
-            || this.defaultDataPointColor
-            || this.colorPalette.getColor(String(value)).value;
+        const fillColor: string | undefined = (this.fillProp && objects)
+            ? dataViewObjects.getFillColor(objects, this.fillProp)
+            : undefined;
+
+        if (fillColor) {
+            return fillColor;
+        }
+
+        if (this.defaultDataPointColor) {
+            return this.defaultDataPointColor;
+        }
+
+        if (this.colorPalette) {
+            return this.colorPalette.getColor(String(value)).value;
+        }
+
+        throw new Error("Color palette is not initialized.");
     }
 
     /**
      * Gets the color for the given measure.
      */
-    public getColorForMeasure(objects: IDataViewObjects, measureKey: any, themeColorName?: ThemeColorName): string {
+    public getColorForMeasure(objects: IDataViewObjects | null | undefined, measureKey: any, themeColorName?: ThemeColorName): string {
         if (this.isHighContrast) {
-            return this.getThemeColor(themeColorName);
+            const highContrastColor = this.getThemeColor(themeColorName);
+
+            if (highContrastColor) {
+                return highContrastColor;
+            }
         }
         // Note, this allocates the color from the scale regardless of if we use it or not which helps keep colors stable.
-        const scaleColor = this.colorPalette.getColor(measureKey).value;
+        const scaleColor = this.colorPalette?.getColor(measureKey).value;
+        const fillColor: string | undefined = (this.fillProp && objects)
+            ? dataViewObjects.getFillColor(objects, this.fillProp)
+            : undefined;
 
-        return (this.fillProp && dataViewObjects.getFillColor(objects, this.fillProp))
-            || this.defaultDataPointColor
-            || scaleColor;
+        if (fillColor) {
+            return fillColor;
+        }
+
+        if (this.defaultDataPointColor) {
+            return this.defaultDataPointColor;
+        }
+
+        if (scaleColor) {
+            return scaleColor;
+        }
+
+        throw new Error("Color palette is not initialized.");
     }
 
     public static normalizeSelector(selector: Selector, isSingleSeries?: boolean): Selector {
@@ -95,13 +138,18 @@ export class ColorHelper {
         return !!(this.colorPalette && (this.colorPalette as ISandboxExtendedColorPalette).isHighContrast);
     }
 
-    public getThemeColor(themeColorName: ThemeColorName = "background"): string {
-        return this.colorPalette
-            && this.colorPalette[themeColorName]
-            && this.colorPalette[themeColorName].value;
+    public getThemeColor(themeColorName: ThemeColorName = "background"): string | undefined {
+        if (!this.colorPalette) {
+            return undefined;
+        }
+
+        const palette: ISandboxExtendedColorPalette = this.colorPalette as ISandboxExtendedColorPalette;
+        const themeColor = palette[themeColorName] as IColorInfo | undefined;
+
+        return themeColor?.value;
     }
 
-    public getHighContrastColor(themeColorName: ThemeColorName = "background", defaultColor?: string): string {
+    public getHighContrastColor(themeColorName: ThemeColorName = "background", defaultColor?: string): string | undefined {
         return this.isHighContrast
             ? this.getThemeColor(themeColorName)
             : defaultColor;

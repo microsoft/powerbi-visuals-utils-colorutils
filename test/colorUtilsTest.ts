@@ -166,7 +166,8 @@ describe("darken", () => {
     it("basic", () => {
         let originalColorString = "#FFFFFF";
         let originalColor = color.parseColorString(originalColorString);
-        let darkenValue = color.darken(originalColor, 255 * 0.25);
+        expect(originalColor).toBeDefined();
+        let darkenValue = color.darken(originalColor!, 255 * 0.25);
         let darkenValueString = color.hexString(darkenValue);
         expect(darkenValueString).toBe("#C0C0C0");
     });
@@ -174,7 +175,8 @@ describe("darken", () => {
     it("edge case", () => {
         let originalColorString = "#000000";
         let originalColor = color.parseColorString(originalColorString);
-        let darkenValue = color.darken(originalColor, 255 * 0.25);
+        expect(originalColor).toBeDefined();
+        let darkenValue = color.darken(originalColor!, 255 * 0.25);
         let darkenValueString = color.hexString(darkenValue);
         expect(darkenValueString).toBe(originalColorString);
     });
@@ -267,10 +269,20 @@ describe("overlay", () => {
 
         it("calculateHighlightColor", () => {
             let yellowRGB = color.parseColorString(yellow);
-            expect(color.calculateHighlightColor(yellowRGB, 0.8, 0.2)).toEqual("#CCCC00");
+            expect(yellowRGB).toBeDefined();
+            expect(color.calculateHighlightColor(yellowRGB!, 0.8, 0.2)).toEqual("#CCCC00");
             let blackRGB = color.parseColorString(black);
-            expect(color.calculateHighlightColor(blackRGB, 0.8, 0.2)).toEqual("#333333");
+            expect(blackRGB).toBeDefined();
+            expect(color.calculateHighlightColor(blackRGB!, 0.8, 0.2)).toEqual("#333333");
         });
+    });
+});
+
+describe("createLinearColorScale", () => {
+    it("returns undefined for NaN values", () => {
+        const scale = color.createLinearColorScale([0, 1], ["#000000", "#FFFFFF"], true);
+
+        expect(scale(Number.NaN)).toBeUndefined();
     });
 });
 

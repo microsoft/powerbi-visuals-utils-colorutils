@@ -1,15 +1,34 @@
-import powerbiVisualsConfigs from "eslint-plugin-powerbi-visuals";
-import tseslint from 'typescript-eslint';
+import js from "@eslint/js";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
+import powerbiVisualsPlugin from "eslint-plugin-powerbi-visuals";
 
 export default [
     {
-        ignores: ["node_modules/", "dist/", ".vscode/", ".tmp/", "test/", "lib/", "mocks/", "coverage/", "webpack.config.js", "karma.conf.ts"],
+        ignores: [
+            "node_modules/**",
+            "dist/**",
+            "coverage/**",
+            "test/**",
+            "lib/**",
+            "eslint.config.mjs"
+        ]
     },
-    ...tseslint.configs.recommended,
-    powerbiVisualsConfigs.configs.recommended,
+    js.configs.recommended,
+    ...tsPlugin.configs["flat/recommended"],
+    powerbiVisualsPlugin.configs.recommended,
     {
+        files: ["**/*.{js,jsx,ts,tsx}"],
+        languageOptions: {
+            parserOptions: {
+                project: "./tsconfig.json",
+                tsconfigRootDir: import.meta.dirname
+            }
+        },
         rules: {
-            "@typescript-eslint/no-explicit-any": "off"
+            "@typescript-eslint/explicit-module-boundary-types": "off",
+            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-inferrable-types": "off",
+            "no-useless-assignment": "off"
         }
-    },
+    }
 ];
