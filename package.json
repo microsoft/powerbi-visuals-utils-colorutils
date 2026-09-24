@@ -1,6 +1,6 @@
 {
   "name": "powerbi-visuals-utils-colorutils",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "ColorUtils",
   "main": "lib/index.js",
   "module": "lib/index.js",
